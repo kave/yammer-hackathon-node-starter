@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var flash = require('express-flash');
 var passport = require('passport');
 var InstagramStrategy = require('passport-instagram').Strategy;
 var LocalStrategy = require('passport-local').Strategy;
@@ -7,6 +8,7 @@ var TwitterStrategy = require('passport-twitter').Strategy;
 var GitHubStrategy = require('passport-github').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var LinkedInStrategy = require('passport-linkedin-oauth2').Strategy;
+var YammerStrategy = require('passport-yammer').Strategy;
 var OAuthStrategy = require('passport-oauth').OAuthStrategy;
 var OAuth2Strategy = require('passport-oauth').OAuth2Strategy;
 
@@ -145,6 +147,42 @@ passport.use(new FacebookStrategy(secrets.facebook, function(req, accessToken, r
     });
   }
 }));
+
+/**
+ * Yammer Authentication via OAuth.
+ */
+
+passport.use(new YammerStrategy({
+    clientID: secrets.yammer.clientId,
+    clientSecret: secrets.yammer.clientSecret,
+    callbackURL: "http://localhost:3000/auth/yammer/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    console.log("Profile: ", profile);
+    console.log("Access Token: ", accessToken);
+    User.findOne({ yammer: profile.id }, function(err, existingUser) {
+      if (existingUser) return done(null, existingUser);
+      User.findOne({ email: profile._json.email }, function(err, existingEmailUser) {
+        if (existingEmailUser) {
+          flash('errors', { msg: 'There is already an account using this email address. Sign in to that account and link it with GitHub manually from Account Settings.' });
+          done(err);
+        } else {
+          var user = new User();
+          user.email = profile._json.email;
+          user.yammer = profile.id;
+          user.tokens.push({ kind: 'yammer', accessToken: accessToken });
+          user.profile.name = profile.displayName;
+          user.profile.picture = profile._json.mugshot_url;
+          user.profile.location = profile._json.location;
+          user.profile.website = profile._json.web_url;
+          user.save(function(err) {
+            done(err, user);
+          });
+        }
+      });
+    });
+  }
+));
 
 /**
  * Sign in with GitHub.
@@ -397,6 +435,7 @@ passport.use('venmo', new OAuth2Strategy({
     });
   }
 ));
+
 
 /**
  * Login Required middleware.

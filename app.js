@@ -169,6 +169,10 @@ app.get('/auth/linkedin', passport.authenticate('linkedin', { state: 'SOME STATE
 app.get('/auth/linkedin/callback', passport.authenticate('linkedin', { failureRedirect: '/login' }), function(req, res) {
   res.redirect(req.session.returnTo || '/');
 });
+app.get('/auth/yammer', passport.authenticate('yammer'));
+app.get('/auth/yammer/callback', passport.authenticate('yammer', { failureRedirect: '/login' }), function(req, res) { 
+  res.redirect(req.session.returnTo || '/');
+});
 
 /**
  * OAuth authorization routes. (API examples)

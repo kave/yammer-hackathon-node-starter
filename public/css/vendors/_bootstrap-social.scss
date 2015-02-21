@@ -91,7 +91,7 @@ $bs-height-xs:   (floor($font-size-small * 1.2) + $padding-small-vertical + 1);
   @include button-variant($color, $color-bg, rgba(0,0,0,.2));
 }
 
-
+.btn-yammer        { @include btn-social(#007bb6); }
 .btn-adn           { @include btn-social(#d87a68); }
 .btn-bitbucket     { @include btn-social(#205081); }
 .btn-dropbox       { @include btn-social(#1087dd); }
