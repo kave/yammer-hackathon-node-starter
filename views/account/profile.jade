@@ -102,3 +102,8 @@ block content
     p: a.text-danger(href='/account/unlink/linkedin') Unlink your LinkedIn account
   else
     p: a(href='/auth/linkedin') Link your LinkedIn account
+  
+  if user.yammer
+    p: a.text-danger(href='/account/unlink/yammer') Unlink your Yammer account
+  else
+    p: a(href='/auth/yammer') Link your Yammer account    
