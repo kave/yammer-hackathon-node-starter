@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    .page-header
+        h3 Know your Co-Workers!
+    ul
+        each user in users
+            img(src=user.yammer.mugshot_url)
+
+
+    h3 Who is #{name} ?

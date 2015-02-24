@@ -146,8 +146,8 @@ module.exports = {
   },
 
   yammer: {
-    clientId: 'XabvyYuFUwJXfP8AnDJc9Q',
-    clientSecret: 'panZ3aNGDoBLcpluOG4rNgGfIYKkhqpuqN2ZVBCI',
+    clientId: '',
+    clientSecret: '',
     callbackURL: 'http://localhost:3000/auth/yammer/callback'
   }
 };
